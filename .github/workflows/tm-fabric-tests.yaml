@@ -21,9 +21,7 @@ name: "(TM-Fabric) Fabric Tests"
 #     update the matching description here too.
 
 on:
-  schedule:
-    # Once daily at 07:00 UTC — fabric CPU-only unit tests.
-    - cron: "0 7 * * *"
+    # Once daily at 07:00 UTC â€” fabric CPU-only unit tests.
   workflow_dispatch:
     inputs:
       run-fabric-cpu-only-unit-tests:

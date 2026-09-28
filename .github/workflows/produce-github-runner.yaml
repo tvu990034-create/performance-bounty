@@ -3,8 +3,6 @@ name: "[internal] Produce GitHub Runner data"
 on:
   workflow_dispatch:
 
-  schedule:
-    - cron: "*/10 * * * *"
 
 permissions:
   contents: read

@@ -659,14 +659,11 @@ on:
         default: false
         description: "Enable Link Time Optimization (LTO)"
 
-  schedule:
-    - cron: "0 3 * * *" # This cron schedule runs the workflow at 3:00 AM UTC daily (model traced runs)
-    - cron: "0 2 * * *" # This cron schedule runs the workflow at 2:00 AM UTC daily (lead model runs)
 
 jobs:
   # Pre-compute all inputs so they can be passed to the impl via needs outputs.
   # GitHub Actions does not support complex expressions (e.g. event_name comparisons)
-  # directly in the `with:` block of a reusable workflow call — values must come
+  # directly in the `with:` block of a reusable workflow call â€” values must come
   # from literal strings/booleans or job outputs.
   resolve-inputs:
     name: Resolve workflow inputs
@@ -750,40 +747,40 @@ jobs:
           echo "tracy=$TRACY" >> $GITHUB_OUTPUT
 
   display-workflow-options:
-    name: 📋 Display workflow options
+    name: ðŸ“‹ Display workflow options
     needs: [resolve-inputs]
     runs-on: ubuntu-22.04
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     steps:
       - name: Display selected workflow options
         run: |
-          echo "::group::🔧 Workflow Configuration Options"
-          echo "┌─────────────────────────────────────────────────────────────┐"
-          echo "│                    TTNN Run Sweeps Configuration            │"
-          echo "├─────────────────────────────────────────────────────────────┤"
-          echo "│ Trigger:              ${{ github.event_name }}"
-          echo "│ Sweep Name:           ${{ needs.resolve-inputs.outputs.sweep-name }}"
-          echo "│ Suite Name:           ${{ needs.resolve-inputs.outputs.suite-name || 'Not specified' }}"
-          echo "│ Skip on Timeout:      ${{ needs.resolve-inputs.outputs.skip-on-timeout }}"
-          echo "│ Group By:             ${{ needs.resolve-inputs.outputs.generate-sweeps-group-by }}"
-          echo "│ Upload Results:       ${{ needs.resolve-inputs.outputs.upload-results }}"
-          echo "│ Measure Device Perf:  ${{ needs.resolve-inputs.outputs.measure-device-perf }}"
-          echo "│ Measure E2E Perf:     ${{ needs.resolve-inputs.outputs.measure-e2e-perf }}"
-          echo "│ Measure Memory:       ${{ needs.resolve-inputs.outputs.measure-memory }}"
-          echo "│ Tracy:                ${{ needs.resolve-inputs.outputs.tracy }}"
-          echo "│ Architecture:         ${{ needs.resolve-inputs.outputs.arch }}"
-          echo "│ Runner Label:         ${{ needs.resolve-inputs.outputs.runner-label }}"
-          echo "│ Log Level:            ${{ needs.resolve-inputs.outputs.log-level }}"
-          echo "│ Use Database:         ${{ needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Model Traced)' || needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Lead Models)' }}"
-          echo "│ Mesh Shape Filter:    ${{ needs.resolve-inputs.outputs.mesh-shape || 'none' }}"
-          echo "│ Platform:             ${{ needs.resolve-inputs.outputs.platform }}"
-          echo "│ Build Type:           ${{ needs.resolve-inputs.outputs.build-type }}"
-          echo "│ Enable LTO:           ${{ needs.resolve-inputs.outputs.enable-lto }}"
-          echo "│ Cron (if scheduled):  ${{ github.event.schedule || 'N/A' }}"
-          echo "└─────────────────────────────────────────────────────────────┘"
+          echo "::group::ðŸ”§ Workflow Configuration Options"
+          echo "â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”"
+          echo "â”‚                    TTNN Run Sweeps Configuration            â”‚"
+          echo "â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤"
+          echo "â”‚ Trigger:              ${{ github.event_name }}"
+          echo "â”‚ Sweep Name:           ${{ needs.resolve-inputs.outputs.sweep-name }}"
+          echo "â”‚ Suite Name:           ${{ needs.resolve-inputs.outputs.suite-name || 'Not specified' }}"
+          echo "â”‚ Skip on Timeout:      ${{ needs.resolve-inputs.outputs.skip-on-timeout }}"
+          echo "â”‚ Group By:             ${{ needs.resolve-inputs.outputs.generate-sweeps-group-by }}"
+          echo "â”‚ Upload Results:       ${{ needs.resolve-inputs.outputs.upload-results }}"
+          echo "â”‚ Measure Device Perf:  ${{ needs.resolve-inputs.outputs.measure-device-perf }}"
+          echo "â”‚ Measure E2E Perf:     ${{ needs.resolve-inputs.outputs.measure-e2e-perf }}"
+          echo "â”‚ Measure Memory:       ${{ needs.resolve-inputs.outputs.measure-memory }}"
+          echo "â”‚ Tracy:                ${{ needs.resolve-inputs.outputs.tracy }}"
+          echo "â”‚ Architecture:         ${{ needs.resolve-inputs.outputs.arch }}"
+          echo "â”‚ Runner Label:         ${{ needs.resolve-inputs.outputs.runner-label }}"
+          echo "â”‚ Log Level:            ${{ needs.resolve-inputs.outputs.log-level }}"
+          echo "â”‚ Use Database:         ${{ needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Model Traced)' || needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Lead Models)' }}"
+          echo "â”‚ Mesh Shape Filter:    ${{ needs.resolve-inputs.outputs.mesh-shape || 'none' }}"
+          echo "â”‚ Platform:             ${{ needs.resolve-inputs.outputs.platform }}"
+          echo "â”‚ Build Type:           ${{ needs.resolve-inputs.outputs.build-type }}"
+          echo "â”‚ Enable LTO:           ${{ needs.resolve-inputs.outputs.enable-lto }}"
+          echo "â”‚ Cron (if scheduled):  ${{ github.event.schedule || 'N/A' }}"
+          echo "â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜"
           echo "::endgroup::"
 
-          echo "::group::📊 Workflow Context Information"
+          echo "::group::ðŸ“Š Workflow Context Information"
           echo "Run ID: ${{ github.run_id }}"
           echo "Run Number: ${{ github.run_number }}"
           echo "Run Attempt: ${{ github.run_attempt }}"
@@ -810,7 +807,7 @@ jobs:
       enable-lto: ${{ fromJSON(needs.resolve-inputs.outputs.enable-lto) }}
 
   generate-master-json-from-db:
-    name: 🗄️ Generate Master JSON from Database
+    name: ðŸ—„ï¸ Generate Master JSON from Database
     needs: [resolve-inputs]
     runs-on: ubuntu-latest
     env:
@@ -897,19 +894,19 @@ jobs:
         || format('tt-ubuntu-2204-{0}-viommu-stable', needs.resolve-inputs.outputs.runner-label)
       }}
     steps:
-      - name: 🧬 Checkout Repository
+      - name: ðŸ§¬ Checkout Repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         timeout-minutes: 20
         with:
           submodules: recursive
           path: docker-job
-      - name: ⬇️  Setup Job
+      - name: â¬‡ï¸  Setup Job
         uses: ./docker-job/.github/actions/setup-job
         timeout-minutes: 10
         with:
           build-artifact-name: ${{ needs.build-artifact.outputs.build-artifact-name }}
           wheel-artifact-name: ${{ needs.build-artifact.outputs.wheel-artifact-name }}
-      - name: 📥 Download database-generated JSON
+      - name: ðŸ“¥ Download database-generated JSON
         if: >-
           needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Model Traced)' ||
           needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Lead Models)'
@@ -1062,35 +1059,35 @@ jobs:
         || format('tt-ubuntu-2204-{0}-viommu-stable', matrix.test-group.runner_label)
       }}
     steps:
-      - name: 🧬 Checkout Repository
+      - name: ðŸ§¬ Checkout Repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         timeout-minutes: 20
         with:
           submodules: recursive
           path: docker-job
-      - name: ⬇️  Setup Job
+      - name: â¬‡ï¸  Setup Job
         uses: ./docker-job/.github/actions/setup-job
         timeout-minutes: 10
         with:
           build-artifact-name: ${{ needs.build-artifact.outputs.build-artifact-name }}
           wheel-artifact-name: ${{ needs.build-artifact.outputs.wheel-artifact-name }}
-      - name: 📋 Display single sweep configuration
+      - name: ðŸ“‹ Display single sweep configuration
         run: |
-          echo "::group::🔧 Single Sweep Execution - Configuration"
-          echo "┌─────────────────────────────────────────────────────────────┐"
-          echo "│                 Single Sweep Configuration                  │"
-          echo "├─────────────────────────────────────────────────────────────┤"
-          echo "│ Target Sweep:         ${{ needs.resolve-inputs.outputs.sweep-name }}"
-          echo "│ Suite Name:           ${{ needs.resolve-inputs.outputs.suite-name || 'Default' }}"
-          echo "│ Architecture:         ${{ needs.resolve-inputs.outputs.arch }}"
-          echo "│ Runner Label:         ${{ needs.resolve-inputs.outputs.runner-label }}"
-          echo "│ Log Level:            ${{ needs.resolve-inputs.outputs.log-level }}"
-          echo "│ Skip on Timeout:      ${{ needs.resolve-inputs.outputs.skip-on-timeout }}"
-          echo "│ Measure Device Perf:  ${{ needs.resolve-inputs.outputs.measure-device-perf }}"
-          echo "│ Upload Results:       ${{ needs.resolve-inputs.outputs.upload-results }}"
-          echo "│ Use Database:         ${{ needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Model Traced)' || needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Lead Models)' }}"
-          echo "│ Mesh Shape Filter:    ${{ needs.resolve-inputs.outputs.mesh-shape || 'none' }}"
-          echo "└─────────────────────────────────────────────────────────────┘"
+          echo "::group::ðŸ”§ Single Sweep Execution - Configuration"
+          echo "â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”"
+          echo "â”‚                 Single Sweep Configuration                  â”‚"
+          echo "â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤"
+          echo "â”‚ Target Sweep:         ${{ needs.resolve-inputs.outputs.sweep-name }}"
+          echo "â”‚ Suite Name:           ${{ needs.resolve-inputs.outputs.suite-name || 'Default' }}"
+          echo "â”‚ Architecture:         ${{ needs.resolve-inputs.outputs.arch }}"
+          echo "â”‚ Runner Label:         ${{ needs.resolve-inputs.outputs.runner-label }}"
+          echo "â”‚ Log Level:            ${{ needs.resolve-inputs.outputs.log-level }}"
+          echo "â”‚ Skip on Timeout:      ${{ needs.resolve-inputs.outputs.skip-on-timeout }}"
+          echo "â”‚ Measure Device Perf:  ${{ needs.resolve-inputs.outputs.measure-device-perf }}"
+          echo "â”‚ Upload Results:       ${{ needs.resolve-inputs.outputs.upload-results }}"
+          echo "â”‚ Use Database:         ${{ needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Model Traced)' || needs.resolve-inputs.outputs.sweep-name == 'ALL SWEEPS (Lead Models)' }}"
+          echo "â”‚ Mesh Shape Filter:    ${{ needs.resolve-inputs.outputs.mesh-shape || 'none' }}"
+          echo "â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜"
           echo "::endgroup::"
       - name: Download sweep vectors
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -1221,13 +1218,13 @@ jobs:
         working-directory: /work # https://github.com/actions/runner/issues/878
     runs-on: ubuntu-latest
     steps:
-      - name: 🧬 Checkout Repository
+      - name: ðŸ§¬ Checkout Repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         timeout-minutes: 20
         with:
           submodules: recursive
           path: docker-job
-      - name: ⬇️  Setup Job
+      - name: â¬‡ï¸  Setup Job
         uses: ./docker-job/.github/actions/setup-job
         timeout-minutes: 10
         with:

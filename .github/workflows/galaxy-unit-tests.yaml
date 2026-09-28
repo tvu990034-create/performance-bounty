@@ -39,8 +39,6 @@ on:
         type: boolean
         default: false
         description: "Enable Link Time Optimization (LTO)"
-  schedule:
-    - cron: "0 8 * * *" # Every day at 8:00 UTC
 
 jobs:
   check-harbor:

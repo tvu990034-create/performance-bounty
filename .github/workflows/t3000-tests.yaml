@@ -68,8 +68,6 @@ on:
         type: boolean
         default: false
         description: "Enable Link Time Optimization (LTO)"
-  schedule:
-    - cron: "0 6 * * *" # runs every day at 6am UTC, 1am EST
 
 run-name: >-
   T3K tests

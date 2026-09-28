@@ -33,9 +33,7 @@ on:
         type: boolean
         default: false
         description: "Enable Link Time Optimization (LTO)"
-  schedule:
     # Every 2 hours (UTC)
-    - cron: "0 */2 * * *"
 
 run-name: "(Galaxy) Sanity"
 

@@ -1,9 +1,7 @@
 name: "(Tier 2) Models Sweep Tests"
 
 on:
-  schedule:
     # Weekly, Saturdays at 06:00 UTC. (GitHub Actions cron is always UTC; scheduled runs fire on the default branch only.)
-    - cron: "0 6 * * 6"
   workflow_dispatch:
     inputs:
       model:

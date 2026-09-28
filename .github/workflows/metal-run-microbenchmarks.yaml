@@ -1,8 +1,6 @@
 name: "metal - Run microbenchmarks"
 
 on:
-  schedule:
-    - cron: "0 1,15 * * *"
   workflow_dispatch:
     inputs:
       platform:

@@ -1,12 +1,10 @@
-name: "Build tt-metal — aarch64 native Ubuntu 24.04"
+name: "Build tt-metal â€” aarch64 native Ubuntu 24.04"
 
 # Native (no Docker) compile check on a GitHub-hosted arm64 runner.
 # Validates that tt-metal builds cleanly on aarch64 Ubuntu 24.04.
 
 on:
-  schedule:
     # Every 2 hours, offset by 7 minutes to spread GH runner load
-    - cron: "7 */2 * * *"
   workflow_dispatch:
     inputs:
       build-type:
@@ -21,7 +19,7 @@ on:
 
 jobs:
   build-aarch64:
-    name: "🛠️ aarch64 Ubuntu 24.04 native build"
+    name: "ðŸ› ï¸ aarch64 Ubuntu 24.04 native build"
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 120
 
@@ -29,7 +27,7 @@ jobs:
       BUILD_TYPE: ${{ inputs.build-type || 'Release' }}
 
     steps:
-      - name: "⬇️ Checkout repository"
+      - name: "â¬‡ï¸ Checkout repository"
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         timeout-minutes: 20
         with:
@@ -37,7 +35,7 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: "📦 Install system dependencies"
+      - name: "ðŸ“¦ Install system dependencies"
         run: |
           set -euo pipefail
           sudo apt-get update -qq
@@ -69,7 +67,7 @@ jobs:
             gnupg \
             ca-certificates
 
-      - name: "🔧 Install LLVM 20 (clang-20)"
+      - name: "ðŸ”§ Install LLVM 20 (clang-20)"
         run: |
           set -euo pipefail
           TEMP_DIR=$(mktemp -d)
@@ -81,7 +79,7 @@ jobs:
           clang-20 --version
           clang++-20 --version
 
-      - name: "📦 Restore CPM source cache"
+      - name: "ðŸ“¦ Restore CPM source cache"
         id: cpm-cache
         uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
@@ -93,18 +91,18 @@ jobs:
               'tt-train/cmake/dependencies.cmake') }}
           restore-keys: cpm-z22-
 
-      - name: "📦 Unpack CPM cache"
+      - name: "ðŸ“¦ Unpack CPM cache"
         run: |
           [ -f .cpmcache.tar.zst ] && tar -I 'zstd -T0' -xf .cpmcache.tar.zst || true
 
-      - name: "⚙️ Configure ccache"
+      - name: "âš™ï¸ Configure ccache"
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           key: ccache-aarch64-ubuntu2404-${{ env.BUILD_TYPE }}
           max-size: "2G"
           append-timestamp: false
 
-      - name: "🔧 Build tt-metal"
+      - name: "ðŸ”§ Build tt-metal"
         run: |
           set -euo pipefail
           ./build_metal.sh \
@@ -115,18 +113,18 @@ jobs:
             --without-python-bindings \
             --disable-profiler
 
-      - name: "📦 Pack CPM cache"
+      - name: "ðŸ“¦ Pack CPM cache"
         if: steps.cpm-cache.outputs.cache-hit != 'true'
         run: |
           [ -d .cpmcache ] && tar -I 'zstd -T0 --ultra -22' -cf .cpmcache.tar.zst .cpmcache || true
 
-      - name: "📦 Save CPM source cache"
+      - name: "ðŸ“¦ Save CPM source cache"
         if: steps.cpm-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: .cpmcache.tar.zst
           key: ${{ steps.cpm-cache.outputs.cache-primary-key }}
 
-      - name: "📊 ccache statistics"
+      - name: "ðŸ“Š ccache statistics"
         if: always()
         run: ccache -s

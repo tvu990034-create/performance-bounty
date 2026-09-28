@@ -36,8 +36,6 @@ on:
         type: boolean
         default: false
         description: "Enable Link Time Optimization (LTO)"
-  schedule:
-    - cron: "0 2,8,14,20 * * *" # every 6 hours, 4 runs a day
 run-name: "(Single-card) Device perf regressions"
 jobs:
   check-harbor:

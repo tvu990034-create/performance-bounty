@@ -9,10 +9,8 @@ name: "Kernel clang-tidy and IWYU"
 # See tech_reports/code-indexing/kernel-clang-tidy.md.
 
 on:
-  schedule:
     # Saturdays at noon PST (13:00 during PDT; cron is UTC and has no DST).
     # Scheduled runs only fire on the default branch.
-    - cron: "0 20 * * 6"
   workflow_dispatch:
     inputs:
       enabled-skus:

@@ -7,8 +7,6 @@ on:
       - "main"
     paths:
       - "infra/**"
-  schedule:
-    - cron: "0 */6 * * *"
 
 jobs:
   build-and-test-infra:

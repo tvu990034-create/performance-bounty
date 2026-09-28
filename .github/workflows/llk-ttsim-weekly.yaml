@@ -1,9 +1,9 @@
-name: 🗓️ LLK ttsim Weekly
+name: ðŸ—“ï¸ LLK ttsim Weekly
 
 # Standalone scheduler for the LLK ttsim regression suite. Runs the full
 # regression against blackhole, wormhole, and quasar on a hardware-less
 # runner. ttsim is still under active development so the expectation is
-# that many tests will fail — this workflow is strictly *informational*:
+# that many tests will fail â€” this workflow is strictly *informational*:
 # the job status stays neutral, no pass/fail checks are published, and
 # the Slack digest uses neutral language ("N/M passing") rather than
 # success/failure banners. The deliverable is the HTML report uploaded
@@ -14,26 +14,24 @@ name: 🗓️ LLK ttsim Weekly
 #   - weekly cron at 02:00 UTC every Friday
 on:
   workflow_dispatch:
-  schedule:
     # Fridays at 02:00 UTC. GitHub evaluates cron in UTC (note: scheduled
-    # runs can lag by a few minutes during peak load — don't rely on
+    # runs can lag by a few minutes during peak load â€” don't rely on
     # sub-hour precision).
-    - cron: "0 2 * * 5"
 
 permissions:
   # `packages: write` is required by build-docker-artifact.yaml to push
   # the LLK CI image tag if it doesn't already exist. No `checks: write`
-  # on purpose — see llk-ttsim-weekly-impl.yaml for rationale.
+  # on purpose â€” see llk-ttsim-weekly-impl.yaml for rationale.
   contents: read
   packages: write
 
 jobs:
   build-images:
-    name: "🐳️ Docker setup"
+    name: "ðŸ³ï¸ Docker setup"
     uses: ./.github/workflows/build-docker-artifact.yaml
 
   ttsim-weekly:
-    name: "🧪 LLK ttsim regression"
+    name: "ðŸ§ª LLK ttsim regression"
     needs: build-images
     uses: ./.github/workflows/llk-ttsim-weekly-impl.yaml
     secrets: inherit
@@ -41,9 +39,9 @@ jobs:
       docker-image: ${{ needs.build-images.outputs.llk-ci-tag }}
 
   ttsim-digest:
-    name: "📊 Weekly ttsim digest"
+    name: "ðŸ“Š Weekly ttsim digest"
     runs-on: ubuntu-latest
-    # Only broadcast on scheduled runs — manual triggers are typically
+    # Only broadcast on scheduled runs â€” manual triggers are typically
     # ad-hoc debugging and don't need Slack noise. `always()` so the job
     # still runs when the regression reports failures (it's expected to).
     if: always() && github.event_name == 'schedule'
@@ -73,7 +71,7 @@ jobs:
           path: reports/quasar
         continue-on-error: true
 
-      # Combined result over every child in `needs:`, most-severe-wins — the same
+      # Combined result over every child in `needs:`, most-severe-wins â€” the same
       # aggregation sanity-tests.yaml feeds its AI run summary. Reading toJSON(needs)
       # instead of one job's `result`/`outputs.matrix` keeps this data-driven if another
       # impl leg is added to `needs:` later.
@@ -153,7 +151,7 @@ jobs:
                   failed  += int(s.attrib.get("failures", 0) or 0)
                   skipped += int(s.attrib.get("skipped",  0) or 0)
               # "finished" = testcases recorded in the XML; "crashed" =
-              # enumerated − finished (collected but never reported because the
+              # enumerated âˆ’ finished (collected but never reported because the
               # worker died first). enumerated may be unavailable on older runs.
               finished = total
               enumerated = read_enumerated(enum_path)
@@ -182,24 +180,24 @@ jobs:
           for label, xml, enum in archs:
               s = summarize(xml, enum)
               if s is None:
-                  lines.append(f"• *{label}*: no report produced (infra error — see run logs).")
+                  lines.append(f"â€¢ *{label}*: no report produced (infra error â€” see run logs).")
               else:
                   crashed_txt = "n/a" if s["crashed"] is None else str(s["crashed"])
                   lines.append(
-                      f"• *{label}*: "
-                      f"✅ {s['passed']}/{s['ran']} passing "
-                      f"({s['pass_pct']:.1f}%) · "
-                      f"❌ {s['failed']} failed · "
-                      f"⏩ {s['skipped']} skipped · "
-                      f"🏁 {s['finished']} finished · "
-                      f"💥 {crashed_txt} crashed"
+                      f"â€¢ *{label}*: "
+                      f"âœ… {s['passed']}/{s['ran']} passing "
+                      f"({s['pass_pct']:.1f}%) Â· "
+                      f"âŒ {s['failed']} failed Â· "
+                      f"â© {s['skipped']} skipped Â· "
+                      f"ðŸ {s['finished']} finished Â· "
+                      f"ðŸ’¥ {crashed_txt} crashed"
                   )
 
-          header = f"📊 *LLK ttsim weekly digest ({TTSIM_VERSION})* 📊"
+          header = f"ðŸ“Š *LLK ttsim weekly digest ({TTSIM_VERSION})* ðŸ“Š"
           if REG_RESULT != "success":
-              # Only flag infra-level issues — ttsim test failures are expected
+              # Only flag infra-level issues â€” ttsim test failures are expected
               # and are reflected in the counts below, not in this banner.
-              header += "  _(regression workflow did not complete cleanly — check run logs)_"
+              header += "  _(regression workflow did not complete cleanly â€” check run logs)_"
 
           body = "\n".join([
               header,
@@ -230,10 +228,10 @@ jobs:
           # Channel id comes from repo secret `LLK_CI_STATUS_CHANNEL_ID`
           # (same secret that .github/actions/report-failure uses, so the
           # digest lands in the same Slack channel as the nightly report).
-          # No `attachments` — Slack renders the attachment body below the
+          # No `attachments` â€” Slack renders the attachment body below the
           # top-level `text`, which duplicated the title, and the `color`
           # attribute is the only thing producing the colored vertical
-          # sidebar. The neutral tone is carried by the 📊 emoji and the
+          # sidebar. The neutral tone is carried by the ðŸ“Š emoji and the
           # "Informational run" disclaimer in the body instead.
           # `toJSON` JSON-escapes newlines, quotes, and the backticks/
           # stars in the Slack mrkdwn body.

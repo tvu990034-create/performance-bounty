@@ -3,8 +3,6 @@ name: "[internal] Produce GitHub Merge Queue data"
 on:
   workflow_dispatch:
 
-  schedule:
-    - cron: "*/5 * * * *"
 
 permissions:
   contents: read

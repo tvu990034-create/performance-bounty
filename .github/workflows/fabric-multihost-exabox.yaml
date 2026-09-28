@@ -1,8 +1,6 @@
 name: "(SC4) Health check & Fabric Test"
 
 on:
-  schedule:
-    - cron: "0 5 * * *" # Runs every day at 5:00 AM UTC
   workflow_dispatch:
 
 permissions:
@@ -12,7 +10,7 @@ permissions:
 run-name: Fabric Test on a BH Quad
 
 # Parent workflow: build once, then run the pipeline_reorg matrix via
-# fabric-multihost-exabox-impl.yaml (same pattern as models-e2e-tests-impl →
+# fabric-multihost-exabox-impl.yaml (same pattern as models-e2e-tests-impl â†’
 # models-e2e-tests-multihost-impl). Tests live in
 # tests/pipeline_reorg/fabric_multihost_exabox_tests.yaml.
 jobs:

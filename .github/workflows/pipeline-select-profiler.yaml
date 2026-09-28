@@ -1,8 +1,6 @@
 name: "(Profiler) Choose your pipeline"
 
 on:
-  schedule:
-    - cron: "0 2 * * *" # Run daily at 2am UTC
   workflow_dispatch:
     inputs:
       run-t3k-profiler:

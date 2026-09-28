@@ -6,8 +6,6 @@ name: "Deprecation reaper"
 # .github/deprecations.json -- so the countdown starts at merge and nobody has to
 # remember a date. Run it on demand from the Actions tab via "Run workflow".
 on:
-  schedule:
-    - cron: "0 8 * * 1" # Mondays 08:00 UTC
   workflow_dispatch:
 
 permissions:

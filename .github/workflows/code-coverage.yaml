@@ -6,8 +6,8 @@ name: "Nightly LLVM Code Coverage"
 # and publishes to tenstorrent/tt-metal-code-coverage (gh-pages).
 #
 # Areas:
-#   ttnn          — ttnn unit tests (Python, wheel-installed .so objects)
-#   metal-runtime — tt_metal C++ runtime unit tests (GTest binaries)
+#   ttnn          â€” ttnn unit tests (Python, wheel-installed .so objects)
+#   metal-runtime â€” tt_metal C++ runtime unit tests (GTest binaries)
 #
 # To add a new area:
 #   1. Add a `run-<area>-tests` job below that calls the relevant impl workflow
@@ -18,8 +18,6 @@ name: "Nightly LLVM Code Coverage"
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 3 * * *'  # 03:00 UTC nightly
 
 jobs:
   check-harbor:
@@ -84,7 +82,7 @@ jobs:
     with:
       docker-image: ${{ needs.build-artifact.outputs.dev-docker-image }}
       build-artifact-name: ${{ needs.build-artifact.outputs.build-artifact-name }}
-      # wh_n150_civ2: single-card WH — sufficient for runtime unit tests
+      # wh_n150_civ2: single-card WH â€” sufficient for runtime unit tests
       enabled-skus: "wh_n150_civ2"
       collect-coverage: true
       prebuilt-image: ${{ needs.bake-test-env.outputs.image }}
@@ -164,11 +162,11 @@ jobs:
             local html_dir="/work/coverage_html/${area}"
             local json_out="/work/coverage/${area}-summary.json"
 
-            echo "::group::Coverage — ${area}"
+            echo "::group::Coverage â€” ${area}"
 
-            # Check objects first — no point merging profdata if there is nothing to report against.
+            # Check objects first â€” no point merging profdata if there is nothing to report against.
             if [ ${#objects[@]} -eq 0 ]; then
-              echo "::error::No instrumented objects found for area '${area}' — cannot generate coverage"
+              echo "::error::No instrumented objects found for area '${area}' â€” cannot generate coverage"
               echo "::endgroup::"
               return 1
             fi
@@ -177,7 +175,7 @@ jobs:
             shopt -s globstar nullglob
             local profdata_files=("${profdata_dir}"/**/*.profdata)
             if [ ${#profdata_files[@]} -eq 0 ]; then
-              echo "::warning::No profdata artifacts found for area '${area}' — skipping"
+              echo "::warning::No profdata artifacts found for area '${area}' â€” skipping"
               echo "::endgroup::"
               return 0
             fi
@@ -221,7 +219,7 @@ jobs:
             ttnn_objects+=("$obj")
           done < <(find /opt/venv/lib -path "*/ttnn/build/lib/*.so" -print0 2>/dev/null)
           generate_area "ttnn" "${ttnn_objects[@]}" \
-            || echo "::warning::ttnn coverage generation failed — continuing with remaining areas"
+            || echo "::warning::ttnn coverage generation failed â€” continuing with remaining areas"
 
           # ------------------------------------------------------------------ #
           # Area: metal-runtime
@@ -236,7 +234,7 @@ jobs:
             metal_runtime_objects+=("$obj")
           done < <(find /work/docker-job/build/lib -name "libtt_metal*.so" -type f -print0 2>/dev/null)
           generate_area "metal-runtime" "${metal_runtime_objects[@]}" \
-            || echo "::warning::metal-runtime coverage generation failed — continuing with remaining areas"
+            || echo "::warning::metal-runtime coverage generation failed â€” continuing with remaining areas"
 
       - name: Generate step summary
         if: always()

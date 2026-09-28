@@ -3,13 +3,9 @@ name: "Sanity tests nightly debug run"
 run-name: "Sanity tests nightly debug run${{ github.event.schedule == '0 1 * * *' && ' with watcher' || (inputs.enable-watcher && ' with watcher' || '') }}${{ github.event.schedule == '0 2 * * *' && ' with LLK asserts' || (inputs.enable-llk-asserts && ' with LLK asserts' || '') }}"
 
 on:
-  schedule:
     # Runs nightly at 12:00 AM UTC
-    - cron: "0 0 * * *"
     # Runs nightly at 1:00 AM UTC with watcher enabled
-    - cron: "0 1 * * *"
     # Runs nightly at 2:00 AM UTC with LLK asserts enabled
-    - cron: "0 2 * * *"
 
   workflow_dispatch:
     inputs:

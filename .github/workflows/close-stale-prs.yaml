@@ -11,8 +11,6 @@ permissions:
   actions: write
 
 on:
-  schedule:
-    - cron: "0 5 * * 1-4"   # Runs at 05:00 UTC, Monday through Thursday
   workflow_dispatch: # Allows manual trigger
 
 jobs:

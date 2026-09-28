@@ -1,8 +1,6 @@
 name: Agentic Research Model Tests
 
 on:
-  schedule:
-    - cron: "0 7 * * 6" # Saturday morning, UTC
   workflow_dispatch:
     inputs:
       model:

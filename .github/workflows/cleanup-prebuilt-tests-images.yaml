@@ -53,8 +53,6 @@ permissions:
   packages: write
 
 on:
-  schedule:
-    - cron: "*/15 * * * *"
   workflow_dispatch:
     inputs:
       min-versions-to-keep:

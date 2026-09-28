@@ -1,9 +1,7 @@
 name: "LLK bit-exact"
 
 on:
-  schedule:
     # Run every night at 3AM UTC
-    - cron: '0 3 * * *'
   workflow_dispatch:
     inputs:
       architecture:

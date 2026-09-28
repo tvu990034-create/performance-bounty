@@ -42,9 +42,7 @@ on:
           - deepseek_decode
           - deepseek_unit_tests
 
-  schedule:
     # Run daily at 1 AM UTC
-    - cron: "0 1 * * *"
 
 permissions:
   contents: write

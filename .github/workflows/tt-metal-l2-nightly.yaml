@@ -1,8 +1,6 @@
 name: "Nightly tt-metal L2 tests"
 
 on:
-  schedule:
-    - cron: "0 6 * * *"
   workflow_dispatch:
     inputs:
       run_wormhole:
@@ -145,7 +143,7 @@ jobs:
           fi
 
           if [[ "$run_wormhole" != "true" && "$run_blackhole" != "true" ]]; then
-            echo "❌ Error: Neither wormhole nor blackhole was selected."
+            echo "âŒ Error: Neither wormhole nor blackhole was selected."
             exit 1
           fi
 
@@ -452,7 +450,7 @@ jobs:
   # =============================================================================
   # LLK team
   # =============================================================================
-  # LLK Unit Tests — runs the full LLK gtest binary in slow dispatch as a comprehensive
+  # LLK Unit Tests â€” runs the full LLK gtest binary in slow dispatch as a comprehensive
   # nightly regression. The PR gate covers two narrower slices (FD path via
   # llk-fd-unit-tests-* and a Quasar+SD-only slice via llk-sd-unit-tests-*); this job is the
   # superset that re-validates everything in SD on every supported runner class.
@@ -492,7 +490,7 @@ jobs:
   # check-harbor, build-artifact, generate-arch-matrix and resolve-docker-pull-refs
   # are in `needs:` because every test job is gated on them: when the build fails the
   # impls are *skipped*, not failed, and without them the combined result would be
-  # `skipped` — which suppresses infra synthesis entirely and reports a broken run as
+  # `skipped` â€” which suppresses infra synthesis entirely and reports a broken run as
   # if nothing was due.
   ai-run-summary:
     name: "AI Run Summary"
@@ -514,7 +512,7 @@ jobs:
       - tt-train-perf-finetuning-tests
       - triage-tests
       - llk-unit-tests
-    # Reports on a run that failed — the case the summary exists for — but not
+    # Reports on a run that failed â€” the case the summary exists for â€” but not
     # on one that was cancelled: an aborted run has no outcome to summarize, and
     # asking for one spends an LLM call to say it stopped early.
     if: ${{ !cancelled() }}

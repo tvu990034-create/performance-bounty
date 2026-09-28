@@ -1,9 +1,7 @@
 name: "LLK e2e Tests"
 
 on:
-  schedule:
     # Run every night at 1AM UTC
-    - cron: '0 1 * * *'
   workflow_dispatch:
     inputs:
       pytest_markers:

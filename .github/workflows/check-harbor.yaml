@@ -22,15 +22,13 @@ on:
           `schedule` trigger below, since the `inputs` context does not exist
           for that event at all. Used to tell apart "I am check-harbor's own
           hourly monitor" from "I was workflow_call'd by a workflow that
-          itself happens to be schedule-triggered" (e.g. sanity-tests.yaml) —
+          itself happens to be schedule-triggered" (e.g. sanity-tests.yaml) â€”
           github.event_name/github.event.schedule can't distinguish the two,
           since they're inherited from the whole run's root trigger either way.
     outputs:
       harbor-prefix:
         description: "Harbor pull-through prefix from org vars when healthy; empty to pull GHCR directly"
         value: ${{ jobs.check.outputs.harbor-prefix }}
-  schedule:
-    - cron: "0 * * * *"
 
 jobs:
   check:
@@ -55,7 +53,7 @@ jobs:
           # consumer must always fall back gracefully instead. EVENT_NAME alone can't
           # tell the two apart (it's inherited from the whole run's root trigger, so
           # it reads "schedule" even when a schedule-triggered caller like
-          # sanity-tests.yaml workflow_call's us) — CALLED_VIA_WORKFLOW_CALL resolves
+          # sanity-tests.yaml workflow_call's us) â€” CALLED_VIA_WORKFLOW_CALL resolves
           # to its declared default ("true") only when this run *is* a workflow_call,
           # since the `inputs` context plainly does not exist on the standalone
           # `schedule` trigger.
@@ -113,7 +111,7 @@ jobs:
             if [ "$OVERALL_STATUS" = "healthy" ]; then
               HARBOR_HEALTHY=true
               echo "harbor-prefix=$HARBOR_PREFIX" >> "$GITHUB_OUTPUT"
-              echo "✓ Harbor is available"
+              echo "âœ“ Harbor is available"
             else
               echo "::error title=Harbor Unhealthy::Harbor overall status is: $OVERALL_STATUS. Docker pulls will fall back to direct GHCR."
               echo "harbor-prefix=" >> "$GITHUB_OUTPUT"

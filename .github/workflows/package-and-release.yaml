@@ -33,10 +33,8 @@ on:
         default: ""
         type: string
 
-  schedule:
     # Create dev every day at EOD of PST Mon-Fri + night of Sunday to kick off
     # dev testing and builds for beginning of work week
-    - cron: "0 0 * * *"
 
 permissions:
   contents: write
@@ -361,9 +359,9 @@ jobs:
              [[ "${{ github.ref }}" == refs/tags/v* ]] || \
              [[ "${{ inputs.dry-run }}" == "true" ]]; then
             should_create_for_ref=true
-            echo "✓ Git ref condition met: ${{ github.ref }}"
+            echo "âœ“ Git ref condition met: ${{ github.ref }}"
           else
-            echo "✗ Git ref condition not met: ${{ github.ref }}"
+            echo "âœ— Git ref condition not met: ${{ github.ref }}"
           fi
 
           # Check if required jobs succeeded
@@ -373,13 +371,13 @@ jobs:
           echo "Job results - create-tag: ${{ needs.create-tag.result }}, create-release-notes: ${{ needs.create-release-notes.result }}, build-test-publish: ${{ needs.build-test-publish.result }}"
 
           if [[ "$create_tag_success" != "true" ]] || [[ "$create_notes_success" != "true" ]]; then
-            echo "✗ Required jobs (create-tag, create-release-notes) did not succeed. Skipping release creation."
+            echo "âœ— Required jobs (create-tag, create-release-notes) did not succeed. Skipping release creation."
             echo "should-skip-release=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
           if [[ "$should_create_for_ref" != "true" ]]; then
-            echo "✗ Git ref conditions not met. Skipping release creation."
+            echo "âœ— Git ref conditions not met. Skipping release creation."
             echo "should-skip-release=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -488,9 +486,9 @@ jobs:
           )
           for file in "${required_files[@]}"; do
             if [ -f "$file" ]; then
-              echo "✓ $file ($(du -h "$file" | cut -f1))"
+              echo "âœ“ $file ($(du -h "$file" | cut -f1))"
             else
-              echo "✗ $file (MISSING)"
+              echo "âœ— $file (MISSING)"
             fi
           done
           echo ""
@@ -498,9 +496,9 @@ jobs:
           if [ -d "debian-packages" ]; then
             deb_count=$(find debian-packages -name "*.deb" | wc -l)
             echo "Found $deb_count Debian package(s):"
-            find debian-packages -name "*.deb" -exec bash -c 'for f in "$@"; do size=$(du -h "$f" | cut -f1); echo "  ✓ $f ($size)"; done' _ {} +
+            find debian-packages -name "*.deb" -exec bash -c 'for f in "$@"; do size=$(du -h "$f" | cut -f1); echo "  âœ“ $f ($size)"; done' _ {} +
           else
-            echo "✗ debian-packages directory not found"
+            echo "âœ— debian-packages directory not found"
           fi
           echo ""
           echo "=== All files that would be uploaded to release ==="
@@ -607,7 +605,7 @@ jobs:
             comparison_result="$(compare_versions "$latestRCVersion" "$latestProdVersion")"
             case "$comparison_result" in
               2)
-                echo "RC and production versions are equal ($latestRCVersion ≈ $latestProdVersion), using production release"
+                echo "RC and production versions are equal ($latestRCVersion â‰ˆ $latestProdVersion), using production release"
                 latestReleaseVersion="$latestProdVersion"
                 ;;
               0)

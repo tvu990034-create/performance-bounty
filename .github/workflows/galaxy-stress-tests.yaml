@@ -1,8 +1,6 @@
 name: "(Galaxy) Stress"
 
 on:
-  schedule:
-    - cron: "0 3 * * 6" # Run @ 3am every Saturday
   workflow_dispatch:
     inputs:
       platform:

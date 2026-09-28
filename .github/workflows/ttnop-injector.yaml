@@ -20,9 +20,7 @@ on:
         options:
           - changed
           - full
-  schedule:
     # Sundays at 03:17 UTC (Saturday night in Eastern time)
-    - cron: "17 3 * * 0"
 
 permissions:
   actions: read

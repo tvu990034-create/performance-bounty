@@ -5,8 +5,6 @@ name: "(nightly) Sanity - manylinux wheel canary"
 # manylinux build (packaging/ABI) is caught with daily cadence instead of only at release.
 
 on:
-  schedule:
-    - cron: "0 4 * * *"
   workflow_dispatch:
 
 permissions:
