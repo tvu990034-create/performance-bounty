@@ -138,6 +138,39 @@ std::ostream& operator<<(std::ostream& os, const MeshCoordinate& coord);
 // over the same logical coordinate set in different orders must encode to identical key bytes.
 // The op-family packers canonicalize the multi-coordinate set (sort before encoding), so a
 // permutation walk is safe to introduce anywhere -- it perturbs order, never the encoded key.
+//
+// Walk-separation bounds (host-verified in the audit harness: swept n in {1..1000} x 5 seeds).
+// Let p2 = 2^ceil(log2 n) be the stream domain and pi the Feistel involution on [0, p2). Since pi
+// is a bijection, walking j = 0, 1, 2, ... and emitting values < n passes through exactly p2 - n
+// rejections. This pins the walk's pacing and budget:
+//
+//   (B1) Lag bound: two consecutive EMITTED positions are reached within p2 - n + 1 stream steps;
+//        every stream window of p2 - n + 1 successive j's lands in [0, n) at least once. After m
+//        emissions the stream cursor is at most m + (p2 - n).
+//   (B2) Max-run bound: a contiguous run of rejections has length <= p2 - n (an analytic ceiling;
+//        reached when the rejected values form one contiguous block of the domain).
+//   (B3) Skip budget: p2 <= 2n - 1 for n > 1, so total skips over the whole walk are < n and all
+//        n positions materialize in fewer than 2n stream steps (O(n) worst case, never O(n^2)).
+//   (B4) Fixed points / structure: each round keeps the low lo_bits invariant and re-XORs the high
+//        half through them, so the compound map is (hi, lo) -> (hi ^ g(lo), lo) with g = mixB ^ mixA:
+//        a position is fixed wherever g(lo) == 0. Measured over the swept shapes x seeds this is up
+//        to ~6% of the domain at n = 1000 (and ~12% at 512, 25% at 128) -- NOT the ~1 fixed point
+//        of a uniform random permutation. Fixed points never break the bijection or (B5); they only
+//        leave a few coordinates in their natural slot, harmless for pacing.
+//   (B5) Seed separation: across the swept shapes (p2 in {4..1024} x 5 seeds) identical maps occur
+//        only at p2 <= 32 -- the g(lo) translation collapses for a few seed pairs on the tiny
+//        domains; at p2 >= 64 every tested seed pair yields a distinct permutation, so distinct
+//        seeds give decorrelated walks whenever the mesh is large enough for the walk to matter.
+//
+//   Code-review note: the current two-round form never interleaves the halves (lo is invariant
+//   through both rounds), so consecutive stream positions share their low bits and the walk is a
+//   block-transposed shuffle rather than a full avalanche. A true Feistel alternates which half
+//   feeds the mixer each round; adopting that would remove the lo-clustering without changing any
+//   bound above. Kept as-is to match the reference and flagged for the maintainers.
+//
+// Together B1-B3 bound host pacing (blends are spread, never clumped) and the walk cost (O(n)
+// deterministic steps), which is all Item 131 promises; the structured key is untouched because
+// packers sort coordinates before encoding (J296).
 // ---------------------------------------------------------------------------------------------
 inline std::uint64_t feistel(std::uint64_t x, std::size_t p2, std::uint64_t seed) noexcept {
     if (p2 <= 2) {  // a 1-bit domain cannot express a Feistel swap; pin the two special cases

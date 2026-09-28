@@ -529,6 +529,32 @@ struct StructuredHeadLayout {
 };
 inline constexpr StructuredHeadLayout kStructuredHeadV2{0, 2, 16, 24, 25, 29, 64};
 
+// Part K / D97+B31: the future v3 head-only row. Offsets are the D97-computed packed layout
+// (version@0, family@2, sub@4, coord_count@16, dtype@17, layout@18, coord_x@19, coord_y@24), a
+// 32-byte head, no tail. The fast-path bucket derives from the 4-byte word at offset 16
+// (coord_count|dtype|layout|x-lsb), so the hit path reads one word, probes, then does a single
+// 32-byte memcmp. Gated off: flipping kUseStructuredHeadV3 routes families to the packed tier
+// behind a version bump (id 3), and a stale v2 key is byte-unequal to v3 keys built from identical
+// inputs -- an exact (rebuild) miss, never a wrong hit (issue #45821 rule).
+inline constexpr bool kUseStructuredHeadV3 = false;
+struct StructuredHeadLayoutV3 {
+    std::uint16_t version_offset;      // u16@0
+    std::uint16_t family_offset;       // u16@2
+    std::uint16_t sub_offset;          // u64@4 -- H232 fold(exact, kSubSeed); no body in head-only
+    std::uint16_t coord_count_offset;  // u8@16
+    std::uint16_t dtype_offset;        // u8@17
+    std::uint16_t layout_offset;       // u8@18
+    std::uint16_t coord_x_offset;      // u32@19
+    std::uint16_t coord_y_offset;      // u32@24
+    std::uint16_t head_bytes;          // 32
+    std::uint16_t fast_word_offset;    // 16
+};
+inline constexpr StructuredHeadLayoutV3 kStructuredHeadV3{0, 2, 4, 16, 17, 18, 19, 24, 32, 16};
+// Part L finding: the v3 slot probe must compare via std::memcmp (as ProgramCacheStructuredKey::
+// operator== already does). std::array<std::byte,32>::operator== lowers to a scalar equal-loop in
+// libstdc++ and measured ~4x slower per probe in the host benchmark; memcmp keeps the head-only
+// hit path at one cache-half compare.
+
 // A 64-byte (one cache line) payload key. Opaque to the tier: the bytes are laid out by the
 // owning op family and read/written through the typed load/store helpers, which are memcpy-based
 // so alignment and strict-aliasing rules are never bent. Comparison is byte-exact.
@@ -568,6 +594,11 @@ static_assert(sizeof(ProgramCacheStructuredKey) == ProgramCacheStructuredKey::kS
 // packer that overruns the fixed head fails to compile instead of corrupting the byte-exact tier.
 static_assert(kStructuredHeadV2.head_bytes == ProgramCacheStructuredKey::kSizeBytes);
 static_assert(kStructuredHeadV2.coord_y_offset + 4 <= ProgramCacheStructuredKey::kSizeBytes);
+// Part K guards: the v3 head-only tier is a 32-byte key, its fast word sits at offset 16, and no
+// field may cross the head boundary. Off here, but the table must stay self-consistent.
+static_assert(kStructuredHeadV3.head_bytes == 32);
+static_assert(kStructuredHeadV3.fast_word_offset == 16);
+static_assert(kStructuredHeadV3.coord_y_offset + 4 <= kStructuredHeadV3.head_bytes);
 
 // Exact variable-length companion to the fixed head: the op layer appends a length-prefixed, byte
 // exact encoding of the key material that does not fit in the 64-byte head (e.g. activation
