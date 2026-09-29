@@ -16,11 +16,6 @@
 name: "[internal] File Jira issue on package-and-release failure"
 
 on:
-  workflow_run:
-    workflows:
-      - "Package and release"
-    types:
-      - completed
   workflow_dispatch:
     inputs:
       run-id:

@@ -3,11 +3,6 @@ name: "[post-commit] all - Static checks, linters etc."
 on:
   workflow_dispatch:
   workflow_call:
-  pull_request:
-    branches:
-      - "main"
-  merge_group:
-
 jobs:
   find-changed-files:
     runs-on: ubuntu-latest

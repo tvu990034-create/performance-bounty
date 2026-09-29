@@ -11,14 +11,6 @@ on:
         description: "Run attempt of the workflow run"
         default: 1
         type: number
-  workflow_run:
-    workflows:
-      - "Sanity tests"
-      - "(Galaxy) Sanity"
-      - "Sanity tests nightly debug run"
-    types:
-      - completed
-
 jobs:
   auto-retry:
     runs-on: ubuntu-slim

@@ -1,8 +1,5 @@
 name: (triage) Aggregate Workflow Data
 on:
-  push:
-    branches:
-      - mchiou/0-aggregate-workflow-report
   workflow_dispatch:
     inputs:
       days:

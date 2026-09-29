@@ -57,18 +57,7 @@
 
 name: "CI Failure Triage (pilot)"
 on:
-  workflow_run:
-    # zizmor: ignore[dangerous-triggers] - workflow_run trigger is secured with role and fork validation
-    branches:
-      - main
-    types:
-      - completed
-    workflows:
-      - Blackhole sanity tests
-      - T3K tests
-      - (Single-card) Demo tests
-      - Nightly tt-metal L2 tests
-
+  workflow_dispatch:
 permissions: {}
 
 concurrency:

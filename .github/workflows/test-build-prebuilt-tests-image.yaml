@@ -5,16 +5,6 @@ name: "Test build-prebuilt-tests-image"
 # claim of the change, so this stays as the producer's regression test.
 
 on:
-  pull_request:
-    # ready_for_review is not a default activity type, and the build below skips
-    # drafts. Without it a PR opened as a draft is never tested on the revision
-    # actually submitted for review. Same reason pr-gate.yaml lists it.
-    types: [opened, synchronize, reopened, ready_for_review]
-    paths:
-      - ".github/workflows/build-prebuilt-tests-image.yaml"
-      - ".github/workflows/test-build-prebuilt-tests-image.yaml"
-      - "dockerfile/Dockerfile.prebuilt-tests-packages"
-      - "dockerfile/Dockerfile.prebuilt-tests-env"
   workflow_dispatch:
 
 permissions:

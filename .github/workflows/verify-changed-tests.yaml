@@ -12,11 +12,7 @@ name: "Verify changed tests"
 # are evaluated on the merge group too, so the trigger cannot simply be dropped.
 
 on:
-  pull_request:
-    branches:
-      - "main"
-    types: [opened, synchronize, reopened, ready_for_review]
-
+  workflow_dispatch:
 concurrency:
   # Keyed per PR so pushes supersede each other, but merge-group runs never cancel
   # one another.

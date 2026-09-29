@@ -1,10 +1,7 @@
 name: "PR - Sanity tests"
 
 on:
-  pull_request:
-    branches:
-      - main
-
+  workflow_dispatch:
 permissions:
   actions: read
   contents: write

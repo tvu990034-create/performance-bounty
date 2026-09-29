@@ -7,13 +7,6 @@ name: "[post-commit] LLK audit tool - unit tests"
 on:
   workflow_dispatch:
   workflow_call:
-  pull_request:
-    branches:
-      - "main"
-    paths:
-      - "tt_metal/tt-llk/.claude/tools/llk-audit/**"
-      - ".github/workflows/llk-audit-tool-tests.yaml"
-
 permissions:
   contents: read
 

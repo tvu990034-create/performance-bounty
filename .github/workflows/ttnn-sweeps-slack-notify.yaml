@@ -1,10 +1,6 @@
 name: "ttnn - sweeps slack notification"
 
 on:
-  workflow_run:
-    workflows: ["ttnn - Run sweeps"]
-    types: [completed]
-    branches: [main]
   workflow_dispatch:
     inputs:
       run_id:

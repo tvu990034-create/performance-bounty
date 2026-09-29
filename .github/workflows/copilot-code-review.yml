@@ -16,10 +16,6 @@ name: "Copilot Code Review Setup Steps"
 # copilot-setup-steps.yml did before the coding-agent experiment.
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - .github/workflows/copilot-code-review.yml
-
 jobs:
   # The job MUST be called 'copilot-setup-steps' even in this file.
   copilot-setup-steps:

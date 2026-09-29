@@ -1,12 +1,7 @@
 name: Inject branch name and CI status into PR description
 
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-
+  workflow_dispatch:
 permissions:
   pull-requests: write
 

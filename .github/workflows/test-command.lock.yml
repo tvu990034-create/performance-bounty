@@ -66,15 +66,7 @@
 
 name: "`/test` — CI pipeline selector for tt-metal"
 on:
-  issue_comment:
-    types:
-      - created
-      - edited
-# roles: # Roles processed as role check in pre-activation job
-# - admin # Roles processed as role check in pre-activation job
-# - maintainer # Roles processed as role check in pre-activation job
-# - write # Roles processed as role check in pre-activation job
-
+  workflow_dispatch:
 permissions: {}
 
 concurrency:

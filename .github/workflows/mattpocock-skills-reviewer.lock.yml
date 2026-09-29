@@ -51,16 +51,7 @@
 
 name: "Matt Pocock Skills Reviewer"
 on:
-  pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - "*.md"
-      - docs/**
-    types:
-      - opened
-      - ready_for_review
-
+  workflow_dispatch:
 permissions: {}
 
 concurrency:

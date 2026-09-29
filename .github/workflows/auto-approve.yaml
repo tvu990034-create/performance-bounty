@@ -18,9 +18,7 @@ name: Auto-approve dependency bumps
 #   3. Never executing any code from the PR branch
 
 on:
-  pull_request_target:
-    types: [opened, synchronize, reopened, ready_for_review]
-
+  workflow_dispatch:
 permissions:
   pull-requests: write
   contents: read

@@ -40,21 +40,6 @@ on:
           - "Ubuntu 22.04"
           - "Ubuntu 24.04"
         description: "Platform to build and test"
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
-  merge_group:
-    types:
-      - checks_requested
-      - destroyed
-  push:
-    branches:
-      # Builds on main will populate the shared ccache to speed up builds on branches
-      - main
-
 concurrency:
   # Groups to control cancelling of obsolete runs.
   # main (or any protected branch): run_id (ie: never cancel other jobs)

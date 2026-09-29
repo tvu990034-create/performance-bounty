@@ -1,7 +1,6 @@
 name: "Issue Notification"
 on:
-  issues:
-    types: [opened]
+  workflow_dispatch:
 jobs:
   gh-slack-bridge:
     runs-on: ubuntu-slim

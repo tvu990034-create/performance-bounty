@@ -1,10 +1,6 @@
 name: "(triage) Runner Failure Scan"
 
 on:
-    # Every four hours, offset from :00 which GitHub sheds first under load.
-  push:
-    branches:
-      - tcheda/runner-failure-scan-prototype
   workflow_dispatch:
     inputs:
       hours:

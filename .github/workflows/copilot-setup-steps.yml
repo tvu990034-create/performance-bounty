@@ -17,11 +17,6 @@ name: "Copilot Setup Steps"
 # which shells into the CI build image. The host runner is in the `docker` group.
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - .github/workflows/copilot-setup-steps.yml
-      - .github/scripts/copilot-build.sh
-
 jobs:
   # The job MUST be called 'copilot-setup-steps' to be recognized by GitHub Copilot Agent
   copilot-setup-steps:

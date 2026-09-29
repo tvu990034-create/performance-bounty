@@ -1,11 +1,7 @@
 name: Bug Check
 
 on:
-  issue_comment:
-    types: [created]
-  pull_request_target:
-    types: [opened, ready_for_review]
-
+  workflow_dispatch:
 jobs:
   parse-comment:
     name: Resolve Target

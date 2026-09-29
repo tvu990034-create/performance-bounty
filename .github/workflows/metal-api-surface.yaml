@@ -3,9 +3,6 @@ name: Compute Public API Surface
 on:
   workflow_dispatch:
   workflow_call:
-  push:
-    branches: ["main"]
-
 permissions:
   actions: read
   contents: write
