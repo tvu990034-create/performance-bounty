@@ -163,7 +163,7 @@ jobs:
 
   # Full scan: single job that analyzes everything
   clang-tidy-full:
-    name: ðŸ¤– Clang Tidy (Full)
+    name: 🤖 Clang Tidy (Full)
     needs: [resolve-docker-pull-refs, build-docker-image, determine-scan-type]
     if: >-
       ${{ always() && !failure() && !cancelled() &&
@@ -184,7 +184,7 @@ jobs:
 
   # Incremental scan: parallel jobs for different targets
   clang-tidy-incremental-tt-metal:
-    name: ðŸ¤– Clang Tidy (Metalium)
+    name: 🤖 Clang Tidy (Metalium)
     needs: [resolve-docker-pull-refs, build-docker-image, determine-scan-type]
     if: >-
       ${{ always() && !failure() && !cancelled() &&
@@ -204,7 +204,7 @@ jobs:
       post-pr-suggestions: ${{ inputs.post-pr-suggestions || false }}
 
   clang-tidy-incremental-ttnn:
-    name: ðŸ¤– Clang Tidy (TTNN)
+    name: 🤖 Clang Tidy (TTNN)
     needs: [resolve-docker-pull-refs, build-docker-image, determine-scan-type]
     if: >-
       ${{ always() && !failure() && !cancelled() &&
@@ -224,7 +224,7 @@ jobs:
       post-pr-suggestions: ${{ inputs.post-pr-suggestions || false }}
 
   clang-tidy-incremental-tt-train:
-    name: ðŸ¤– Clang Tidy (tt-train)
+    name: 🤖 Clang Tidy (tt-train)
     needs: [resolve-docker-pull-refs, build-docker-image, determine-scan-type]
     if: >-
       ${{ always() && !failure() && !cancelled() &&
@@ -244,7 +244,7 @@ jobs:
       post-pr-suggestions: ${{ inputs.post-pr-suggestions || false }}
 
   clang-tidy-incremental-catchall:
-    name: ðŸ¤– Clang Tidy (catchall)
+    name: 🤖 Clang Tidy (catchall)
     needs: [resolve-docker-pull-refs, build-docker-image, determine-scan-type]
     if: >-
       ${{ always() && !failure() && !cancelled() &&

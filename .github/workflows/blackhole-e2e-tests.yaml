@@ -187,7 +187,7 @@ jobs:
     # expected-jobs, so the matrix script runs only once per SKU (in
     # the impl) and there's no logic duplication across workflows.
     needs: [build-artifact, generate-card-matrix, blackhole-e2e-tests]
-    # Reports on a run that failed â€” the case the summary exists for â€” but not
+    # Reports on a run that failed — the case the summary exists for — but not
     # on one that was cancelled: an aborted run has no outcome to summarize, and
     # asking for one spends an LLM call to say it stopped early.
     if: ${{ !cancelled() }}

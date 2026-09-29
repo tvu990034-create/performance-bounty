@@ -359,9 +359,9 @@ jobs:
              [[ "${{ github.ref }}" == refs/tags/v* ]] || \
              [[ "${{ inputs.dry-run }}" == "true" ]]; then
             should_create_for_ref=true
-            echo "âœ“ Git ref condition met: ${{ github.ref }}"
+            echo "✓ Git ref condition met: ${{ github.ref }}"
           else
-            echo "âœ— Git ref condition not met: ${{ github.ref }}"
+            echo "✗ Git ref condition not met: ${{ github.ref }}"
           fi
 
           # Check if required jobs succeeded
@@ -371,13 +371,13 @@ jobs:
           echo "Job results - create-tag: ${{ needs.create-tag.result }}, create-release-notes: ${{ needs.create-release-notes.result }}, build-test-publish: ${{ needs.build-test-publish.result }}"
 
           if [[ "$create_tag_success" != "true" ]] || [[ "$create_notes_success" != "true" ]]; then
-            echo "âœ— Required jobs (create-tag, create-release-notes) did not succeed. Skipping release creation."
+            echo "✗ Required jobs (create-tag, create-release-notes) did not succeed. Skipping release creation."
             echo "should-skip-release=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
           if [[ "$should_create_for_ref" != "true" ]]; then
-            echo "âœ— Git ref conditions not met. Skipping release creation."
+            echo "✗ Git ref conditions not met. Skipping release creation."
             echo "should-skip-release=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -486,9 +486,9 @@ jobs:
           )
           for file in "${required_files[@]}"; do
             if [ -f "$file" ]; then
-              echo "âœ“ $file ($(du -h "$file" | cut -f1))"
+              echo "✓ $file ($(du -h "$file" | cut -f1))"
             else
-              echo "âœ— $file (MISSING)"
+              echo "✗ $file (MISSING)"
             fi
           done
           echo ""
@@ -496,9 +496,9 @@ jobs:
           if [ -d "debian-packages" ]; then
             deb_count=$(find debian-packages -name "*.deb" | wc -l)
             echo "Found $deb_count Debian package(s):"
-            find debian-packages -name "*.deb" -exec bash -c 'for f in "$@"; do size=$(du -h "$f" | cut -f1); echo "  âœ“ $f ($size)"; done' _ {} +
+            find debian-packages -name "*.deb" -exec bash -c 'for f in "$@"; do size=$(du -h "$f" | cut -f1); echo "  ✓ $f ($size)"; done' _ {} +
           else
-            echo "âœ— debian-packages directory not found"
+            echo "✗ debian-packages directory not found"
           fi
           echo ""
           echo "=== All files that would be uploaded to release ==="
@@ -605,7 +605,7 @@ jobs:
             comparison_result="$(compare_versions "$latestRCVersion" "$latestProdVersion")"
             case "$comparison_result" in
               2)
-                echo "RC and production versions are equal ($latestRCVersion â‰ˆ $latestProdVersion), using production release"
+                echo "RC and production versions are equal ($latestRCVersion ≈ $latestProdVersion), using production release"
                 latestReleaseVersion="$latestProdVersion"
                 ;;
               0)

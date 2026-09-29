@@ -14,12 +14,12 @@ on:
 
 jobs:
   clang-static-analyzer:
-    name: ðŸ”¬ Clang Static Analyzer
+    name: 🔬 Clang Static Analyzer
     if: ${{ always() && !failure() && !cancelled() }}
     timeout-minutes: 300
     runs-on: tt-ubuntu-2204-xlarge-stable
     container:
-      # Always use the latest ci-build image â€” CSA runs on main HEAD and
+      # Always use the latest ci-build image — CSA runs on main HEAD and
       # is unlikely to be paired with container changes.
       image: harbor.ci.tenstorrent.net/ghcr.io/tenstorrent/tt-metal/tt-metalium/ubuntu-24.04-ci-build-amd64:latest
       volumes:
@@ -42,10 +42,10 @@ jobs:
       - name: Configure git safe.directory
         run: git config --global --add safe.directory /work
 
-      - name: ðŸ”§ CMake configure
+      - name: 🔧 CMake configure
         run: cmake --preset clang-static-analyzer
 
-      - name: ðŸ› ï¸ Generate files
+      - name: 🛠️ Generate files
         run: cmake --build .build/clang-static-analyzer --target all_generated_files
 
       - name: Setup clang symlinks for CodeChecker
@@ -59,7 +59,7 @@ jobs:
           # Pin to a specific version for reproducibility.
           uv pip install codechecker==6.27.1
 
-      - name: ðŸ”¬ Analyze with CodeChecker
+      - name: 🔬 Analyze with CodeChecker
         id: codechecker
         run: |
           set -euo pipefail
@@ -77,19 +77,19 @@ jobs:
             --config /work/.codechecker.json"
 
           if [ -n "${{ inputs.debug-file-filter }}" ]; then
-            echo "ðŸ› DEBUG MODE: Analyzing only: ${{ inputs.debug-file-filter }}"
+            echo "🐛 DEBUG MODE: Analyzing only: ${{ inputs.debug-file-filter }}"
             ANALYZE_CMD="$ANALYZE_CMD --file '${{ inputs.debug-file-filter }}'"
           fi
 
           # Run analysis (don't fail on analyzer crashes - common with static analysis)
-          eval "$ANALYZE_CMD" || echo "âš ï¸ Analysis completed with warnings"
+          eval "$ANALYZE_CMD" || echo "⚠️ Analysis completed with warnings"
 
           # Set output for downstream steps
           echo "analyze-output=$OUTPUT_DIR" >> "$GITHUB_OUTPUT"
 
           # Show summary
           PLIST_COUNT=$(find "$OUTPUT_DIR" -name "*.plist" 2>/dev/null | wc -l)
-          echo "âœ… Generated $PLIST_COUNT plist files"
+          echo "✅ Generated $PLIST_COUNT plist files"
 
       - name: Generate JSON and HTML reports from analysis results
         run: |
@@ -105,9 +105,9 @@ jobs:
 
           if [ -f "$JSON_OUTPUT" ] && [ -s "$JSON_OUTPUT" ]; then
             ISSUE_COUNT=$(jq '.reports | length' "$JSON_OUTPUT" || echo "0")
-            echo "âœ… JSON report contains $ISSUE_COUNT issues"
+            echo "✅ JSON report contains $ISSUE_COUNT issues"
           else
-            echo "âš ï¸ No JSON output, creating empty report"
+            echo "⚠️ No JSON output, creating empty report"
             echo '{"version": 1, "reports": []}' > "$JSON_OUTPUT"
           fi
 
@@ -118,9 +118,9 @@ jobs:
           CodeChecker parse "$OUTPUT_DIR" --export html --output "$HTML_OUTPUT" || true
 
           if [ -d "$HTML_OUTPUT" ] && [ -n "$(ls -A "$HTML_OUTPUT")" ]; then
-            echo "âœ… HTML report generated"
+            echo "✅ HTML report generated"
           else
-            echo "âš ï¸ HTML report is empty or missing"
+            echo "⚠️ HTML report is empty or missing"
           fi
 
       - name: Upload JSON report
@@ -139,7 +139,7 @@ jobs:
           path: /work/.build/codechecker_html
 
   publish-clangsa-pages:
-    name: ðŸ“„ Publish CSA HTML to GitHub Pages
+    name: 📄 Publish CSA HTML to GitHub Pages
     needs: [clang-static-analyzer]
     # Only publish on full scans (skip when debug-file-filter is used)
     if: >-

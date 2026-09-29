@@ -87,7 +87,7 @@ on:
         required: false
         default: false
         type: boolean
-        description: "Run LLK sanity tests: tt-llk python_tests smoke (WH+BH) and the Quasar compile check. Opt-in â€” unlike the other run-* toggles this defaults to false, so an omitted input means off."
+        description: "Run LLK sanity tests: tt-llk python_tests smoke (WH+BH) and the Quasar compile check. Opt-in — unlike the other run-* toggles this defaults to false, so an omitted input means off."
       enable-watcher:
         required: false
         type: boolean
@@ -290,7 +290,7 @@ jobs:
           encode_ref() {
             # LC_ALL=C so the loop walks bytes rather than characters: percent
             # encoding is defined over the UTF-8 bytes, and a character-wise loop
-            # emits the code point instead, turning `cafÃ©` into caf%E9 rather than
+            # emits the code point instead, turning `café` into caf%E9 rather than
             # caf%C3%A9. ASCII refs encode identically either way.
             local LC_ALL=C s="$1" out="" i c
             for (( i = 0; i < ${#s}; i++ )); do
@@ -431,7 +431,7 @@ jobs:
           fi
 
           if [[ "$run_wormhole" != "true" && "$run_blackhole" != "true" && "$run_sim" != "true" ]]; then
-            echo "âŒ Error: Neither wormhole, blackhole, nor sim was selected."
+            echo "❌ Error: Neither wormhole, blackhole, nor sim was selected."
             exit 1
           fi
 
@@ -680,7 +680,7 @@ jobs:
 
   # LLK sanity (tt-llk python_tests smoke, WH + BH). Opt-in: run-llk-sanity-tests defaults
   # to false, so this leg is off unless a caller asks for it. The `== 'true'` gate is the
-  # same shape models-sanity-tests uses â€” note that input defaults to true, so for it the
+  # same shape models-sanity-tests uses — note that input defaults to true, so for it the
   # gate only excludes push/schedule, where `inputs` is null; here it excludes those events
   # *and* every call that does not opt in.
   llk-sanity-tests:
@@ -721,7 +721,7 @@ jobs:
         with:
           pytest-markers: "quasar"
 
-  # â”€â”€ AI run summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  # ── AI run summary ────────────────────────────────────────────────
   # Aggregates the per-leg ai-job-summary artifacts from the sanity impls this
   # workflow invokes (galaxy-sanity-impl is driven by galaxy-sanity.yaml and is
   # not covered) into one run-level report. expected-jobs is the union of each
@@ -731,7 +731,7 @@ jobs:
   #
   # build-artifact and the matrix jobs are in `needs:` because every impl is
   # gated on them: when a build fails the impls are *skipped*, not failed, and
-  # without them the combined result would be `skipped` â€” which suppresses
+  # without them the combined result would be `skipped` — which suppresses
   # infra synthesis entirely and reports a broken run as if nothing was due.
   ai-run-summary:
     name: "AI Run Summary"
@@ -752,8 +752,8 @@ jobs:
       # llk-smoke-impl uploads none (it publishes JUnit instead). Reconciliation flags an
       # expected leg with no artifact as INFRA_FAILURE, so exposing `matrix` from
       # llk-smoke-impl on its own would report every passing LLK leg as infra-failed.
-      # Both halves â€” the artifact upload and the `matrix` output â€” have to land together.
-    # Reports on a run that failed â€” the case the summary exists for â€” but not
+      # Both halves — the artifact upload and the `matrix` output — have to land together.
+    # Reports on a run that failed — the case the summary exists for — but not
     # on one that was cancelled: an aborted run has no outcome to summarize, and
     # asking for one spends an LLM call to say it stopped early.
     #

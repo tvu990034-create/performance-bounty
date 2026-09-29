@@ -6,7 +6,7 @@ on:
 
 jobs:
   copilot-autofix:
-    name: ðŸ¤– Copilot Autofix ClangSA Issue
+    name: 🤖 Copilot Autofix ClangSA Issue
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -236,12 +236,12 @@ jobs:
         if: always()
         run: |
           SUMMARY="$GITHUB_STEP_SUMMARY"
-          echo "## ðŸ¤– Copilot Autofix ClangSA" >> "$SUMMARY"
+          echo "## 🤖 Copilot Autofix ClangSA" >> "$SUMMARY"
 
           if [ "${{ steps.select-issue.outputs.has-issue }}" != "true" ]; then
             echo "No unprocessed issues found." >> "$SUMMARY"
           elif [ "${{ steps.copilot-fix.outputs.pr-created }}" = "true" ]; then
-            echo "âœ… **PR Created:** ${{ steps.copilot-fix.outputs.pr-url }}" >> "$SUMMARY"
+            echo "✅ **PR Created:** ${{ steps.copilot-fix.outputs.pr-url }}" >> "$SUMMARY"
             echo "" >> "$SUMMARY"
             echo "**Issue fixed:**" >> "$SUMMARY"
             CHECKER="${{ steps.select-issue.outputs.checker }}"
@@ -251,5 +251,5 @@ jobs:
             echo "- ${{ steps.select-issue.outputs.message }}" >> "$SUMMARY"
           else
             REPO="${{ github.repository }}"
-            echo "âš ï¸ No PR created. Check [Copilot dashboard](https://github.com/$REPO/copilot)." >> "$SUMMARY"
+            echo "⚠️ No PR created. Check [Copilot dashboard](https://github.com/$REPO/copilot)." >> "$SUMMARY"
           fi

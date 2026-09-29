@@ -185,20 +185,20 @@ jobs:
         shell: bash
         working-directory: /work
     steps:
-      - name: ðŸ§¬ Checkout Repository
+      - name: 🧬 Checkout Repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         timeout-minutes: 20
         with:
           submodules: recursive
           path: docker-job
           persist-credentials: false
-      - name: â¬‡ï¸ Setup Metal
+      - name: ⬇️ Setup Metal
         uses: ./docker-job/.github/actions/setup-job
         timeout-minutes: 10
         with:
           build-artifact-name: ${{ needs.build-artifact.outputs.build-artifact-name }}
           wheel-artifact-name: ${{ needs.build-artifact.outputs.wheel-artifact-name }}
-      - name: â¬‡ï¸ Checkout vLLM TT plugin
+      - name: ⬇️ Checkout vLLM TT plugin
         if: ${{ inputs.vllm-source != 'fork' }}
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         timeout-minutes: 20
@@ -208,7 +208,7 @@ jobs:
           ref: ${{ inputs.vllm-tt-plugin-ref || 'main' }}
           fetch-depth: 1
           persist-credentials: false
-      - name: â¬‡ï¸ Checkout vLLM fork
+      - name: ⬇️ Checkout vLLM fork
         if: ${{ inputs.vllm-source == 'fork' }}
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         timeout-minutes: 20
@@ -218,7 +218,7 @@ jobs:
           ref: ${{ inputs.vllm-commit || 'dev' }}
           fetch-depth: 0
           persist-credentials: false
-      - name: ðŸ“€ Install vLLM and plugin test dependencies
+      - name: 📀 Install vLLM and plugin test dependencies
         run: |
           if [ "$VLLM_SOURCE" = "fork" ]; then
             VLLM_TARGET_DEVICE=empty uv pip install vllm/ --extra-index-url https://download.pytorch.org/whl/cpu --index-strategy unsafe-best-match
@@ -229,7 +229,7 @@ jobs:
             uv pip install -e ".[dev]"
             popd
           fi
-      - name: ðŸ§ª Run host-only plugin tests
+      - name: 🧪 Run host-only plugin tests
         run: |
           pushd "$PLUGIN_DIR"
           # Root pytest at the plugin so `tests` resolves to the plugin package, not tt-metal's tests/.

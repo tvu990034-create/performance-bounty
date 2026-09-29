@@ -21,7 +21,7 @@ name: "(TM-Fabric) Fabric Tests"
 #     update the matching description here too.
 
 on:
-    # Once daily at 07:00 UTC â€” fabric CPU-only unit tests.
+    # Once daily at 07:00 UTC — fabric CPU-only unit tests.
   workflow_dispatch:
     inputs:
       run-fabric-cpu-only-unit-tests:

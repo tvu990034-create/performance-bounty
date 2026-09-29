@@ -14,7 +14,7 @@ jobs:
   track-compile-time:
     needs: check-harbor
     if: ${{ !cancelled() }}
-    name: "â±ï¸ Track Compile Time"
+    name: "⏱️ Track Compile Time"
     runs-on: tt-ubuntu-2204-large-stable
     timeout-minutes: 120
     container:
@@ -31,7 +31,7 @@ jobs:
         working-directory: /work
 
     steps:
-      - name: â¬‡ï¸ Checkout
+      - name: ⬇️ Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         timeout-minutes: 20
         with:
@@ -39,11 +39,11 @@ jobs:
           fetch-depth: 500
           fetch-tags: true
 
-      - name: ðŸ”§ Configure git safe.directory
+      - name: 🔧 Configure git safe.directory
         run: |
           git config --global --add safe.directory /work
 
-      - name: ðŸ“¦ Restore CPM source cache
+      - name: 📦 Restore CPM source cache
         id: cpm-cache
         uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
@@ -53,11 +53,11 @@ jobs:
             cpm-z22-compile-tracker-
             cpm-z22-
 
-      - name: ðŸ“¦ Unpack CPM cache
+      - name: 📦 Unpack CPM cache
         run: |
           [ -f .cpmcache.tar.zst ] && tar -I 'zstd -T0' -xf .cpmcache.tar.zst || true
 
-      - name: ðŸ”§ CMake configure (no PCH, no Unity, no ccache)
+      - name: 🔧 CMake configure (no PCH, no Unity, no ccache)
         run: |
           ./build_metal.sh \
             --build-dir build \
@@ -69,24 +69,24 @@ jobs:
             --build-all \
             --configure-only
 
-      - name: ðŸ“¦ Pack CPM cache
+      - name: 📦 Pack CPM cache
         if: steps.cpm-cache.outputs.cache-hit != 'true'
         run: |
           [ -d .cpmcache ] && tar -I 'zstd -T0 --ultra -22' -cf .cpmcache.tar.zst .cpmcache || true
 
-      - name: ðŸ“¦ Save CPM source cache
+      - name: 📦 Save CPM source cache
         if: steps.cpm-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: .cpmcache.tar.zst
           key: ${{ steps.cpm-cache.outputs.cache-primary-key }}
 
-      - name: ðŸ“¦ Install GNU time
+      - name: 📦 Install GNU time
         run: |
           apt-get update -qq && apt-get install -y -qq time >/dev/null 2>&1
           /usr/bin/time --version
 
-      - name: â±ï¸ Timed Compile (16 cores)
+      - name: ⏱️ Timed Compile (16 cores)
         id: compile
         timeout-minutes: 90
         run: |
@@ -105,16 +105,16 @@ jobs:
 
           wall_fmt="$((wall_time / 60))m $((wall_time % 60))s"
           cpu_fmt="$((cpu_time / 60))m $((cpu_time % 60))s"
-          echo "## â±ï¸ Wall Time: ${wall_time}s (${wall_fmt})  |  CPU Time: ${cpu_time}s (${cpu_fmt})" >> "$GITHUB_STEP_SUMMARY"
+          echo "## ⏱️ Wall Time: ${wall_time}s (${wall_fmt})  |  CPU Time: ${cpu_time}s (${cpu_fmt})" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: ðŸ”‘ Verify metrics repo PAT
+      - name: 🔑 Verify metrics repo PAT
         run: |
           if [ -z "${{ secrets.CLANGSA_RESULTS_PAT }}" ]; then
             echo "::error::CLANGSA_RESULTS_PAT secret is not set. Add a PAT with repo scope for tenstorrent/tt-metal-compile-time-tracker."
             exit 1
           fi
 
-      - name: ðŸ“Š Append compile time to CSV and push
+      - name: 📊 Append compile time to CSV and push
         env:
           METRICS_PAT: ${{ secrets.CLANGSA_RESULTS_PAT }}
         run: |
@@ -164,15 +164,15 @@ jobs:
           for attempt in 1 2 3; do
             if git push; then
               push_succeeded=true
-              echo "âœ… Pushed on attempt ${attempt}"
+              echo "✅ Pushed on attempt ${attempt}"
               break
             fi
-            echo "âš ï¸ Push failed (attempt ${attempt}/3), rebasing and retrying..."
+            echo "⚠️ Push failed (attempt ${attempt}/3), rebasing and retrying..."
             git pull --rebase
             sleep 2
           done
 
           if [ "${push_succeeded}" != true ]; then
-            echo "âŒ Failed to push metrics after 3 attempts."
+            echo "❌ Failed to push metrics after 3 attempts."
             exit 1
           fi

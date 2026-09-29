@@ -1,7 +1,7 @@
 name: "(Tier 1) Models Device Perf Tests"
 
 on:
-    # Once a day at 07:00 UTC â€” all models, all SKUs
+    # Once a day at 07:00 UTC — all models, all SKUs
   workflow_dispatch:
     inputs:
       model:

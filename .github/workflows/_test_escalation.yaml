@@ -1,8 +1,8 @@
 name: "(infra) Test Owner Escalation"
 
 on:
-    # 04:00 UTC every Tuesday. Org/Slack membership changes are infrequent
-    # enough that a daily check wasn't worth the noise.
+    # previously scheduled 04:00 UTC every Tuesday; schedule removed on fork
+    workflow_dispatch:
 
 permissions:
   contents: read
