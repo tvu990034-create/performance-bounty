@@ -2,11 +2,21 @@
 set -euo pipefail
 shopt -s extglob
 
-# Determine the merge-base between main and the current branch
-MERGE_BASE=$(git merge-base origin/main HEAD)
-
-# Get the list of files changed since the merge-base, ignoring changes on main
-CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT "${MERGE_BASE}..HEAD")
+# Determine the merge-base between main and the current branch.
+# On a fork (or shallow sparse checkout) origin/main may be absent or share no
+# history with HEAD, so fall back to comparing against the current branch's
+# parent, and finally to the whole tree if HEAD has no parent (root commit).
+MERGE_BASE=$(git merge-base origin/main HEAD 2>/dev/null || true)
+if [ -z "$MERGE_BASE" ]; then
+    MERGE_BASE=$(git rev-parse HEAD^ 2>/dev/null || true)
+fi
+if [ -z "$MERGE_BASE" ]; then
+    echo "no merge base found; treating all tracked files as changed" >&2
+    CHANGED_FILES=$(git ls-files)
+else
+    # Get the list of files changed since the merge-base, ignoring changes on main
+    CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT "${MERGE_BASE}..HEAD")
+fi
 
 # Check for specific file patterns
 CMAKE_CHANGED=false

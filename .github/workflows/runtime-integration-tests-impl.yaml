@@ -84,7 +84,7 @@ jobs:
           wheel-artifact-name: ${{ inputs.wheel-artifact-name }}
       - name: Ensure BH links online
         if: ${{ contains(matrix.test-group.sku, 'bh_loudbox') || contains(matrix.test-group.sku, 'bh_galaxy') }}
-        uses: tenstorrent/tt-metal/.github/actions/ensure-bh-links-online@main
+        uses: ./.github/actions/ensure-bh-links-online
         timeout-minutes: 10
       - name: ${{ matrix.test-group.name }}
         timeout-minutes: ${{ matrix.test-group.timeout }}
@@ -92,15 +92,15 @@ jobs:
           mkdir -p generated/test_reports
           echo "${{ matrix.test-group.cmd }}"
           ${{ matrix.test-group.cmd }}
-      - uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+      - uses: ./.github/actions/upload-artifact-with-job-uuid
         timeout-minutes: 10
         if: ${{ !cancelled() }}
         with:
           prefix: "test_reports_"
-      - uses: tenstorrent/tt-metal/.github/actions/slack-report@main
+      - uses: ./.github/actions/slack-report
         if: ${{ failure() }}
         with:
           slack_webhook_url: ${{ secrets.SLACK_METAL_INFRA_PIPELINE_STATUS_ALERT }}
           owner: ${{ matrix.test-group.owner_id }}
-      - uses: tenstorrent/tt-metal/.github/actions/cleanup@main
+      - uses: ./.github/actions/cleanup
         if: always()

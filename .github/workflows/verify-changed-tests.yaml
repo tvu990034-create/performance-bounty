@@ -405,7 +405,7 @@ jobs:
           prefix: "test_reports_"
 
       - name: Generate gtest annotations on failure
-        uses: tenstorrent/tt-metal/.github/actions/generate-gtest-failure-message@main
+        uses: ./.github/actions/generate-gtest-failure-message
         if: ${{ failure() }}
 
   # --- verdict --------------------------------------------------------------

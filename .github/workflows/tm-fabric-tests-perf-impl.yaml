@@ -132,14 +132,14 @@ jobs:
       # /work/generated/profiler/.logs. Distinct from the generic test_reports_
       # artifact; downstream perf tooling ingests these.
       - name: Upload microbenchmark report csvs
-        uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+        uses: ./.github/actions/upload-artifact-with-job-uuid
         timeout-minutes: 10
         if: ${{ !cancelled() }}
         with:
           prefix: microbenchmark-report-csv-${{ matrix.test-group.name }}
           path: /work/generated/profiler/.logs
       - name: Upload generated test reports
-        uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+        uses: ./.github/actions/upload-artifact-with-job-uuid
         timeout-minutes: 10
         if: ${{ !cancelled() }}
         with:
@@ -158,7 +158,7 @@ jobs:
           check_latency: ${{ github.ref_name == 'main' }}
       - name: Upload benchmark data
         if: ${{ !cancelled() && github.ref_name == 'main' && matrix.test-group.upload_benchmarks == true && steps.check-data.outputs.has_benchmark_data == 'true' }}
-        uses: tenstorrent/tt-metal/.github/actions/upload-data-via-sftp@main
+        uses: ./.github/actions/upload-data-via-sftp
         with:
           ssh-private-key: ${{ secrets.SFTP_BENCHMARK_WRITER_KEY }}
           sftp-batchfile: /work/.github/actions/upload-data-via-sftp/fabric_bandwidth_benchmark_data_batchfile.txt
@@ -167,12 +167,12 @@ jobs:
           path: /work
       - name: Upload latency data
         if: ${{ !cancelled() && github.ref_name == 'main' && matrix.test-group.upload_benchmarks == true && steps.check-data.outputs.has_latency_data == 'true' }}
-        uses: tenstorrent/tt-metal/.github/actions/upload-data-via-sftp@main
+        uses: ./.github/actions/upload-data-via-sftp
         with:
           ssh-private-key: ${{ secrets.SFTP_BENCHMARK_WRITER_KEY }}
           sftp-batchfile: /work/.github/actions/upload-data-via-sftp/fabric_latency_benchmark_data_batchfile.txt
           username: ${{ secrets.SFTP_FABRIC_LATENCY_WRITER_USERNAME }}
           hostname: ${{ secrets.SFTP_FABRIC_BENCHMARK_WRITER_HOSTNAME }}
           path: /work
-      - uses: tenstorrent/tt-metal/.github/actions/cleanup@main
+      - uses: ./.github/actions/cleanup
         if: always()

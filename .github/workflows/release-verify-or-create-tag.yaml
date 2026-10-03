@@ -51,7 +51,7 @@ jobs:
 
       - name: Calculate version
         id: calculate-version
-        uses: tenstorrent/tt-metal/.github/actions/calculate-version@main
+        uses: ./.github/actions/calculate-version
         with:
           tag-type: ${{ inputs.tag-type }}
           force-bump-type: ${{ inputs.force-bump-type }}

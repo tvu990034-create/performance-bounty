@@ -129,11 +129,11 @@ jobs:
           } 2>&1 | tee "$LOG_FILE"
           exit "${PIPESTATUS[0]}"
 
-      - uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+      - uses: ./.github/actions/upload-artifact-with-job-uuid
         if: ${{ !cancelled() }}
         timeout-minutes: 10
         with:
           prefix: "test_reports_"
 
-      - uses: tenstorrent/tt-metal/.github/actions/cleanup@main
+      - uses: ./.github/actions/cleanup
         if: always()

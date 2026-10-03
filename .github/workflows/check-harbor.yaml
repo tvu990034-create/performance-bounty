@@ -9,7 +9,7 @@ on:
       runs-on:
         required: false
         type: string
-        default: "tt-ubuntu-light"
+        default: "ubuntu-latest"
         description: "Runner label for the Harbor health check job"
       called-via-workflow-call:
         required: false
@@ -33,7 +33,7 @@ on:
 jobs:
   check:
     name: "Check Harbor"
-    runs-on: ${{ inputs.runs-on || 'tt-ubuntu-light' }}
+    runs-on: ${{ inputs.runs-on || 'ubuntu-latest' }}
     permissions:
       contents: read
     outputs:

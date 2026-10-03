@@ -185,7 +185,7 @@ jobs:
 
       - name: Ensure BH Eth links online
         if: ${{ contains(matrix.test-group.mesh-device, 'P150') }}
-        uses: tenstorrent/tt-metal/.github/actions/ensure-bh-links-online@main
+        uses: ./.github/actions/ensure-bh-links-online
         timeout-minutes: 10
 
       - name: 🔎 Validate vllm-source
@@ -748,14 +748,14 @@ jobs:
           SAFE_NAME=$(echo "${{ matrix.test-group.name }}" | tr ' ' '_')
           echo "prefix=vllm_output_${SAFE_NAME}_" >> $GITHUB_OUTPUT
 
-      - uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+      - uses: ./.github/actions/upload-artifact-with-job-uuid
         timeout-minutes: 10
         if: ${{ !cancelled() }}
         with:
           path: docker-job/output/
           prefix: ${{ steps.set-artifact-prefix.outputs.prefix }}
 
-      - uses: tenstorrent/tt-metal/.github/actions/cleanup@main
+      - uses: ./.github/actions/cleanup
         if: always()
 
   ai-run-summary:

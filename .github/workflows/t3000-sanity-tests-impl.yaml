@@ -231,7 +231,7 @@ jobs:
       - name: Check for benchmark and latency data
         id: check-data
         if: ${{ !cancelled() && github.ref_name == 'main' && matrix.test-group.upload_benchmarks == true }}
-        uses: tenstorrent/tt-metal/.github/actions/check-latency-bw-results@main
+        uses: ./.github/actions/check-latency-bw-results
         with:
           path: /work
           arch: wormhole_b0
@@ -239,7 +239,7 @@ jobs:
           check_latency: ${{ github.ref_name == 'main' }}
       - name: Upload benchmark data
         if: ${{ !cancelled() && github.ref_name == 'main' && matrix.test-group.upload_benchmarks == true && steps.check-data.outputs.has_benchmark_data == 'true' }}
-        uses: tenstorrent/tt-metal/.github/actions/upload-data-via-sftp@main
+        uses: ./.github/actions/upload-data-via-sftp
         with:
           ssh-private-key: ${{ secrets.SFTP_BENCHMARK_WRITER_KEY }}
           sftp-batchfile: /work/.github/actions/upload-data-via-sftp/fabric_bandwidth_benchmark_data_batchfile.txt
@@ -248,7 +248,7 @@ jobs:
           path: /work
       - name: Upload latency data
         if: ${{ !cancelled() && github.ref_name == 'main' && matrix.test-group.upload_benchmarks == true && steps.check-data.outputs.has_latency_data == 'true' }}
-        uses: tenstorrent/tt-metal/.github/actions/upload-data-via-sftp@main
+        uses: ./.github/actions/upload-data-via-sftp
         with:
           ssh-private-key: ${{ secrets.SFTP_BENCHMARK_WRITER_KEY }}
           sftp-batchfile: /work/.github/actions/upload-data-via-sftp/fabric_latency_benchmark_data_batchfile.txt
@@ -256,7 +256,7 @@ jobs:
           hostname: ${{ secrets.SFTP_FABRIC_BENCHMARK_WRITER_HOSTNAME }}
           path: /work
 
-      - uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+      - uses: ./.github/actions/upload-artifact-with-job-uuid
         timeout-minutes: 17
         if: ${{ !cancelled() }}
         with:
@@ -277,5 +277,5 @@ jobs:
           api-key: ${{ secrets.TT_CHAT_API_KEY }}
           api-url: ${{ secrets.TT_CHAT_URL }}
           job-name: ${{ matrix.test-group.name }}
-      - uses: tenstorrent/tt-metal/.github/actions/cleanup@main
+      - uses: ./.github/actions/cleanup
         if: always()

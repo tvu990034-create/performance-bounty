@@ -145,13 +145,13 @@ jobs:
             uv pip install -r tools/triage/requirements.txt
             echo "${{ matrix.test-group.cmd }}"
             ${{ matrix.test-group.cmd }}
-      - uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+      - uses: ./.github/actions/upload-artifact-with-job-uuid
         timeout-minutes: 10
         if: ${{ !cancelled() }}
         with:
           prefix: "test_reports_"
       - name: Generate test annotations on failure
-        uses: tenstorrent/tt-metal/.github/actions/generate-gtest-failure-message@main
+        uses: ./.github/actions/generate-gtest-failure-message
         if: ${{ failure() }}
       - name: 🤖 AI job summary
         if: ${{ !cancelled() }}

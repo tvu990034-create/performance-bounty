@@ -218,7 +218,7 @@ jobs:
 
       - name: Upload metrics data to AWS SFTP bucket
         if: ${{ !cancelled() && inputs.test-category == 'perf' && hashFiles('docker-job/generated/tt-train-metrics/**') != '' }}
-        uses: tenstorrent/tt-metal/.github/actions/upload-data-via-sftp@main
+        uses: ./.github/actions/upload-data-via-sftp
         with:
           ssh-private-key: ${{ secrets.TT_TRAIN_AWS_KEY }}
           sftp-batchfile: /work/.github/actions/upload-data-via-sftp/tt_train_model_metrics.txt
@@ -233,14 +233,14 @@ jobs:
           ccache --show-stats || echo "ccache stats not available"
           echo "::endgroup::"
 
-      - uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+      - uses: ./.github/actions/upload-artifact-with-job-uuid
         timeout-minutes: 10
         if: always() && hashFiles('docker-job/generated/tt-train-metrics/**') != ''
         with:
           path: /work/generated/tt-train-metrics
           prefix: "metrics_"
 
-      - uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+      - uses: ./.github/actions/upload-artifact-with-job-uuid
         timeout-minutes: 10
         if: always() && hashFiles('docker-job/generated/test_reports/**') != ''
         with:
@@ -265,5 +265,5 @@ jobs:
           api-url: ${{ secrets.TT_CHAT_URL }}
           job-name: ${{ matrix.test-group.name }}
 
-      - uses: tenstorrent/tt-metal/.github/actions/cleanup@main
+      - uses: ./.github/actions/cleanup
         if: always()

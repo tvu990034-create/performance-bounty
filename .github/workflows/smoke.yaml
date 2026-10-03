@@ -323,7 +323,7 @@ jobs:
           include_passed: false
           fail_on_failure: false
 
-      - uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+      - uses: ./.github/actions/upload-artifact-with-job-uuid
         if: ${{ !cancelled() }}
         timeout-minutes: 10
         with:

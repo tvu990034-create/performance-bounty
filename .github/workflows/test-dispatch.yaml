@@ -141,5 +141,5 @@ jobs:
           uv pip install pytest-repeat
           ${{ inputs.command }}
         shell: bash
-      - uses: tenstorrent/tt-metal/.github/actions/cleanup@main
+      - uses: ./.github/actions/cleanup
         if: always()

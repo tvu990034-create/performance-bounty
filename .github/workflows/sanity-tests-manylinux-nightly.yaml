@@ -33,6 +33,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: tenstorrent/tt-metal/.github/actions/slack-report@main
+      - uses: ./.github/actions/slack-report
         with:
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -12,7 +12,7 @@ on:
       runs-on:
         required: false
         type: string
-        default: "tt-ubuntu-2204-large-stable"
+        default: "ubuntu-22.04"
         description: "Runner label for the build-artifact job"
       tracy:
         required: false
@@ -269,7 +269,7 @@ on:
       runs-on:
         required: false
         type: string
-        default: "tt-ubuntu-2204-large-stable"
+        default: "ubuntu-22.04"
         description: "Runner label for the build-artifact job"
       enable-lto:
         required: false

@@ -163,7 +163,7 @@ jobs:
           sku: ${{ matrix.test-group.sku }}
       - name: Ensure BH links online
         if: ${{ contains(matrix.test-group.sku, 'bh_loudbox') }}
-        uses: tenstorrent/tt-metal/.github/actions/ensure-bh-links-online@main
+        uses: ./.github/actions/ensure-bh-links-online
         timeout-minutes: 10
       - name: ${{ matrix.test-group.name }}
         if: ${{ !startsWith(matrix.test-group.sku, 'sim_') }}
@@ -203,7 +203,7 @@ jobs:
           path: /work/mem_report.json
           if-no-files-found: warn
           retention-days: 30
-      - uses: tenstorrent/tt-metal/.github/actions/upload-artifact-with-job-uuid@main
+      - uses: ./.github/actions/upload-artifact-with-job-uuid
         timeout-minutes: 10
         if: ${{ !cancelled() }}
         with:
@@ -225,10 +225,10 @@ jobs:
           api-key: ${{ secrets.TT_CHAT_API_KEY }}
           api-url: ${{ secrets.TT_CHAT_URL }}
           job-name: ${{ matrix.test-group.name }}
-      - uses: tenstorrent/tt-metal/.github/actions/slack-report@main
+      - uses: ./.github/actions/slack-report
         if: ${{ failure() }}
         with:
           slack_webhook_url: ${{ secrets.SLACK_METAL_INFRA_PIPELINE_STATUS_ALERT }}
           owner: ${{ matrix.test-group.owner_id }}
-      - uses: tenstorrent/tt-metal/.github/actions/cleanup@main
+      - uses: ./.github/actions/cleanup
         if: always()
