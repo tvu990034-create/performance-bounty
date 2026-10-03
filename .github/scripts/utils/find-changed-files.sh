@@ -6,9 +6,12 @@ shopt -s extglob
 # On a fork (or shallow sparse checkout) origin/main may be absent or share no
 # history with HEAD, so fall back to comparing against the current branch's
 # parent, and finally to the whole tree if HEAD has no parent (root commit).
+# NOTE: use `rev-parse --verify` (not bare `rev-parse HEAD^`) because on a
+# root commit bare `rev-parse` writes its input "--verify... HEAD^" -- which
+# is non-empty -- to stdout even on failure, defeating the empty-string check.
 MERGE_BASE=$(git merge-base origin/main HEAD 2>/dev/null || true)
 if [ -z "$MERGE_BASE" ]; then
-    MERGE_BASE=$(git rev-parse HEAD^ 2>/dev/null || true)
+    MERGE_BASE=$(git rev-parse --verify -q HEAD^ 2>/dev/null || true)
 fi
 if [ -z "$MERGE_BASE" ]; then
     echo "no merge base found; treating all tracked files as changed" >&2
